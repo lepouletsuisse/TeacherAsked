@@ -25,6 +25,11 @@ a {
   a:hover {
     text-decoration: underline; }
 
+.multipleAnswer{
+  font-size: 14px;
+  color: grey;
+}
+
 .login-button{
 }
 

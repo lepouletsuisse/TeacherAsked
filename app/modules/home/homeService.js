@@ -54,9 +54,36 @@
 						return res;		
 					});
 				},
-				//Enter room
-				enterRoom: function(username, roomId){
-					return true;
+				//Create a student
+				createStudent: function(username){
+					return $http({
+						url: apiBaseURL + "/students", 
+						method: "POST", 
+						data: {
+							"username": username
+						},
+					})
+					.then(function(res){
+						return res;
+					})
+					.catch(function(res){
+						return res;		
+					});
+				},
+				checkRoom: function(roomId){
+					return $http({
+						url: apiBaseURL + "/rooms", 
+						method: "GET", 
+						params: {
+							"roomId": roomId
+						},
+					})
+					.then(function(res){
+						return res;
+					})
+					.catch(function(res){
+						return res;		
+					});
 				}
 			}
 		}

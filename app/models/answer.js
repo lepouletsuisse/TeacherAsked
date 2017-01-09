@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
 
 var AnswerSchema = new Schema({
     type: {type: Number, required: true},
-    possibleAnswers: {type: [String], required: true},
-    goodAnswer: {type: Number, required: false} //Index of the good answer
+    possibleAnswers: {type: [Schema.Types.Mixed], required: true},
+    correctAnswer: {type: Number, required: false} //Index of the good answer
 });
 
 mongoose.model('Answer', AnswerSchema);

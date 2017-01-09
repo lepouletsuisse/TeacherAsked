@@ -14,6 +14,7 @@ angular.module('roomstudent')
 		$stateProvider
 			.state('roomstudent', {
 				url:'/roomstudent',
+				params: {'roomId': '0000'},
 				templateUrl: 'app/modules/roomstudent/roomstudent.html',
 				controller: 'RoomstudentCtrl',
 				controllerAs: 'vm'

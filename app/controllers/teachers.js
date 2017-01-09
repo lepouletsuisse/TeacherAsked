@@ -22,21 +22,3 @@ router.get('/', function(req, res){
         }
     });
 });
-
-/*router.use(passport.authenticate("jwt", {session: false}));
-
-router.get('/', function (req, res, next){
-    User.find(function(err, users){
-        if(err) return next(err);
-        res.json(users);
-    });
-});
-
-router.get('/:id', function(req, res, next){
-    var id = req.params("id");
-    console.log("GET /users/" + id);
-    User.findOne({_id: id}, function(err, user){
-        if(err) return next(err);
-        res.json(user);
-    });
-});*/

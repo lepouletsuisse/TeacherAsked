@@ -27,17 +27,17 @@ router.post('/', function(req, res){
     }
 
     newTeacher.save(function (err, doc, n){
-            if (err){
-                console.log(err);
-                if(err.name === "ValidationError"){
-                    res.status(422).json("Invalid user data");
-                } else if(err.name === "MongoError" && err.message.startsWith("E11000 duplicate key")){
-                    res.status(422).json("Username is not available");
-                } else{
-                    res.status(500).json(err);
-                }
+        if (err){
+            console.log(err);
+            if(err.name === "ValidationError"){
+                return res.status(422).json("Invalid user data");
+            } else if(err.name === "MongoError" && err.message.startsWith("E11000 duplicate key")){
+                return res.status(422).json("Username is not available");
+            } else{
+                res.status(500).json(err);
             }
-            console.log("User created! " + newTeacher.username);
-            return res.status(201).json(newTeacher.username);
-        });
+        }
+        console.log("Teacher created! " + newTeacher.username);
+        return res.status(201).json(newTeacher.username);
+    });
 });

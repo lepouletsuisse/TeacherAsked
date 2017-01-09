@@ -50,11 +50,9 @@
 				TeacherProfileService.createRoom(vm.className, vm.numberParticipants, $localStorage.token)
 				.then(function(res){
 					if(res.status == 201){
-						toaster.pop("info", "Create room", "Succesfully create room " + res.data.roomConnectionId);
-						console.log(res.data);
-						$state.go('roomteacher', {roomId: res.data.roomConnectionId});
+						$state.go('roomteacher', {roomId: res.data.roomId});
 					}else{
-						toaster.pop("error", "Create Room", "Impossible to create the room!");
+						toaster.pop("error", "Create Room", res.data);
 					}
 				})
 			}

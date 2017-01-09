@@ -6,9 +6,7 @@ var app = express();
 var router = express.Router();
 var mongoose = require('mongoose');
 var Question = mongoose.model('Question');
-var realtime = require('../realtime/realtime.js');
 var socketIoURL = config.socketIoURL;
-var io = require("socket.io-client");
 
 module.exports = function(app){
     app.use(function(req, res, next) {
@@ -34,7 +32,6 @@ router.post('/', function(req, res){
                 return next(err);
             }
         }
-        realtime.notifyQuestion(req.body);
         return res.status(201).json(doc);
     });
 

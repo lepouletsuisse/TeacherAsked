@@ -25,6 +25,8 @@
 			/*jshint validthis: true */
 			var vm = this;
 
+			$localStorage.token = undefined;
+
 			vm.usernameTeacher = "";
 			vm.firstname = "";
 			vm.lastname = "";
@@ -38,7 +40,7 @@
 					if(res.status == 200){
 						toaster.pop('info', "Login", "Successful login! Welcome " + res.data.username);
 						$localStorage.token = res.data.token;
-						$state.go('teacherprofile');
+						return $state.go('teacherprofile');
 					}else if(res.status == 401){
 						toaster.pop('error', "Login", res.data);
 					}else{
@@ -59,14 +61,24 @@
 			}
 
 			vm.submitStudent = function(){
-				if(vm.usernameStudent == "" || vm.roomId == ""){
-					toaster.pop('error',"Enter room", "You didn't fill all the fields! Please process than submit again.");
-					return;
-				}
-				if(HomeService.enterRoom(vm.usernameStudent, vm.roomId) == true){
-					toaster.pop('info', "Enter room", "Successful enter in room " + vm.roomId + "! Welcome " + vm.usernameStudent);
-					$state.go('roomstudent');
-				}
+				HomeService.checkRoom(vm.roomId)
+				.then(function(resRoom){
+					if(resRoom.status == 200){
+						HomeService.createStudent(vm.usernameStudent)
+						.then(function(resStudent){
+							if(resStudent.status == 201){
+								$localStorage.token = resStudent.data.token;
+								return $state.go('roomstudent', {roomId: resRoom.data.roomId});
+								
+							}else{
+								toaster.pop('error', "Student", resStudent.data);
+							}
+						});
+					}else{
+						toaster.pop('error', 'Student', resRoom.data);
+					}
+				});
+				
 			}
 		}
 })();

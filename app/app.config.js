@@ -13,7 +13,6 @@
 		.module('teacherasked')
 		.config(configure)
 		.run(runBlock);
-		//.run(setupSocketIO);
 
 	configure.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$qProvider'];
 
@@ -39,23 +38,4 @@
 
 		console.log('AngularJS run() function...');
 	}
-
-  function setupSocketIO(socketio, $rootScope) {
-    console.log("setup socket io factory");
-    console.log(socketio);
-    socketio.init();
-
-    socketio.on('msg_welcome', function (msg) {
-      console.log("welcome message received via socket.io received in pages.module.js");
-      console.log(msg);
-      console.log("broadcasting socket.io message via AngularJS event system");
-      $rootScope.$broadcast('msg_welcome', msg);
-    });
-    socketio.on('msg_question', function (msg) {
-      console.log("question message received via socket.io in app.config.js");
-      console.log(msg);
-      console.log("broadcasting socket.io message via AngularJS event system");
-      $rootScope.$broadcast('msg_question', msg);
-    });
-  }
 })();

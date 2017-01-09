@@ -1,3 +1,4 @@
+<script src="/socket.io/socket.io.js"></script>
 <section class="page-header">
     <h1 class="project-name">TeacherAsked</h1>
      </section>
@@ -10,29 +11,41 @@
       <div class="columns">
         <div class="first-column">
           <h4>Ask a question</h4>
-          <form>
+          <form ng-submit="vm.submitQuestion()" name="question-form">
             <table class="question-table">
               <tr>
-                  <td><label>Question</label></td><td><input type="text" name="question"></td>
+                  <td><label>Question</label></td><td><input type="text" name="question" ng-model="vm.question" ng-init="vm.question=''"></td>
               </tr>
               <tr>
-                  <td><label>Type of answer</label></td><td>
-                    <select name="typeAnswer">
-                    <option value="text">Text</option>
-                    <option value="boolean">Boolean</option>
-                    <option value="multipleChoice">Multiple choice</option>
+                <td><label>Type of answer</label></td><td>
+                  <select name="typeAnswer" ng-model="vm.typeAnswer">
+                    <option value="text" selected>Text</option>
+                    <option value="multipleAnswer">Multiple choice</option>
+                  </select>
+                </td>
+              </tr>
+              <tr ng-if="vm.typeAnswer=='text'">
+                <td><label>Correct answer</label></td><td><input type="text" name="correctTextAnswer" ng-model="vm.correctTextAnswer" ng-init="vm.correctMultipleAnswer='1'"></td>
+              </tr>
+              <tr ng-if="vm.typeAnswer=='multipleAnswer'">
+                <td><label>Answer multiple</label></td><td><button type="button" ng-click="vm.addRow()">Add</button><button type="button" ng-click="vm.removeRow()">Remove</button></td>
+              </tr>
+              <tr ng-repeat="element in vm.dynamicAnswers" ng-if="vm.typeAnswer=='multipleAnswer'">
+                <td class="multipleAnswer">Answer {{element.id}}</td><td><input type="text" name="answer" ng-model="element.value"></td>
+              </tr>
+              <tr ng-if="vm.typeAnswer=='multipleAnswer'">
+                <td>Correct answer</td>
+                  <td><select name="correctMultipleAnswer" ng-model="vm.correctMultipleAnswer">
+                  <option ng-repeat="element in vm.dynamicAnswers" value="{{element.id}}">Answer {{element.id}}</option>
                   </select>
                 </td>
               </tr>
               <tr>
-                  <td><label>Answer</label></td><td><input type="text" name="answer"></td>
-              </tr>
-              <tr>
-                  <td><label>Auto-check answer</label></td><td><input type="checkbox" name="checkAnswer" checked></td>
+                  <td><label>Auto-check answer</label></td><td><input type="checkbox" name="checkAnswer" ng-model="vm.autoCheck" ng-init="vm.autoCheck=true"></td>
               </tr>
               <tr>
                   <td>
-                    <div><button onclick="">Ask</button></div>
+                    <div><button type="submit">Ask</button></div>
                   </td>
               </tr>
             </table>
@@ -40,12 +53,9 @@
         </div>
         <div class="second-column">
             <h4>Connected students</h4>
-            <table class="student-table">
+            <table class="student-table" ng-repeat="student in vm.room.students">
                 <tr>
-                  <td><a href="#">Jean-kevin (Logged at 11:32)</a></td>
-                </tr>
-                <tr>
-                  <td><a href="#">Terminator (Logged at 11:35)</a></td>
+                  <td><a href="#">{{student.username}} (Logged at {{student.loginTimestamp}})</a></td>
                 </tr>
             </table>
         </div>

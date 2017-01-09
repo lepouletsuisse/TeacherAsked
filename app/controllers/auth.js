@@ -31,7 +31,9 @@ router.get('/', function(req, res){
             return res.status(401).json("Invalid credentials! Please try again");
         }else{
             var data = {
-                "who": teacher.username,
+                "username": teacher.username,
+                "firstname": teacher.firstname,
+                "lastname": teacher.lastname,
                 "type": "Teacher"
             };
             var newToken = jwt.sign(data, config.jwtsecret);

@@ -9,6 +9,6 @@
 	 * Module of the app
 	 */
 
-  	angular.module('roomstudent', []);
+  	angular.module('roomstudent', ['ngStorage', 'toaster']);
 
 })();

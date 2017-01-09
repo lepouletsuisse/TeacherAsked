@@ -7,7 +7,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Room = mongoose.model('Room');
 var Teacher = mongoose.model('Teacher');
-var realtime = require('../realtime/realtime.js');
 
 module.exports = function(app){
     app.use(function(req, res, next) {
@@ -21,12 +20,19 @@ module.exports = function(app){
 router.get('/', function(req, res, next){
     var roomId = req.query.roomId;
 
-    Room.findOne({roomConnectionId: roomId}, function(err, room){
+    Room.findOne({roomId: roomId}, function(err, room){
         if(err){
-            return next({status: 500, message: err});
+            if(err.name === "ValidationError"){
+                return res.status(422).json("Invalid data");
+            } else if(err.name === "CastError" && err.message.startsWith("Cast to number failed")){
+                return res.status(422).json("Room Id should be a number!");
+            }else{
+                return res.status(500).json("Unknow error!");
+            }
         }else if(room == null){
-            return next({status: 401, message: "Invalid room id!"})
+            return res.status(401).json("Invalid room id!");
         }else{
+            room.questions = undefined;
             return res.status(200).json(room);
         }
     });
@@ -48,11 +54,10 @@ router.post('/', function(req, res, next){
 
         newRoom.save(function(err, doc, n){
             if(err){
-                console.log(err);
-                if(err.name === "ValidationError"){
-                    return next({status: 422, message: "Invalid data"});
-                } else{
-                    return next(err);
+                if(err.errors.numberParticipants.name === "CastError" && err.errors.numberParticipants.message.startsWith("Cast to Number failed")){
+                    return res.status(422).json("Number of participants should be a number!");
+                }else{
+                    return res.status(500).json("Unknow error!");
                 }
             }else{
                 return res.status(201).json(doc);
