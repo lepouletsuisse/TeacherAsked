@@ -25,6 +25,24 @@ a {
   a:hover {
     text-decoration: underline; }
 
+.radio-answers{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.possibleAnswers{
+  color:black;
+}
+
+.room-link{
+  cursor: pointer;
+}
+
+.hideAnswer-checkbox{
+  width: 16px;
+  height: 16px;
+}
+
 .multipleAnswer{
   font-size: 14px;
   color: grey;
@@ -70,6 +88,28 @@ a {
 .currentQuestion-text{
   font-size: 40px;
   color: darkslateblue !important;
+}
+
+.lastQuestion-text{
+  color: darkslateblue;
+  font-size: 20px;
+  text-align: center;
+}
+
+.correctAnswer-text{
+  text-align: left !important;
+}
+
+.table-center{
+  margin-left: auto;
+  margin-right: auto;
+}
+.table-center td{
+  text-align: center;
+}
+
+.table-center-div{
+  text-align: center;
 }
 
 .goodAnswer{
@@ -141,13 +181,42 @@ button{
     .btn + .btn {
       margin-top: 1rem;
       margin-left: 0; } }
+.btn{
+  padding: 10px;
+  background-color: #bdc3c7;
+  color: black;
+}
+.btn-group{
+  margin: 10px;
+}
+
+.btn-primary:hover{
+ background-color: #2ecc71;
+ color: white;
+}
+.btn-primary:active{
+  background-color: #2980b9;
+  color: white;
+}
 
 .page-header {
   color: #fff;
   text-align: center;
   margin-bottom: 20px;
-  margin-top: 10px;}
+  margin-top: 10px;
+  border: 0px}
 
+.answer-date{
+  color:grey;
+}
+
+.correctAnswer{
+  color:limegreen;
+}
+
+.wrongAnswer{
+  color:red;
+}
 /*@media screen and (min-width: 64em) {
   .page-header {
     padding: 5rem 6rem; } }

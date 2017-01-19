@@ -131,6 +131,7 @@ module.exports = function (grunt) {
 			production: {
 				files: {
 					'index.html': [
+						'src/bower_components/bootstrap/dist/css/bootstrap.min.css',
 						'app/assets/css/*.css',
 						'app/assets/js/*.js'
 					]

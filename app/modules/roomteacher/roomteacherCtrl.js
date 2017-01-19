@@ -27,16 +27,20 @@
 
 			vm.typeAnswer = "text";
 
-			vm.roomId;
+			vm.data = [[0]];
+			vm.labels = [""];
 
 			var currentRoomId = $stateParams.roomId;
 			var teacher;
-			var room;
 			var socket;
 
 			if($localStorage.token == undefined){
 				toaster.pop('error', "Room Teacher", 'No token! Log in please!');
 				return $state.go('home');
+			}
+
+			if(currentRoomId == "0000" && $localStorage.roomId !== undefined){
+				currentRoomId = $localStorage.roomId;
 			}
 
 			var checkRoom = RoomteacherService.getRoom(currentRoomId)
@@ -45,8 +49,8 @@
 					toaster.pop('error', "Room Teacher", "Room id invalid!");
 					return $state.go('teacherprofile');
 				}else{
-					room = res.data;
-					vm.roomId = room.roomId;
+					vm.roomId = res.data.roomId;
+					$localStorage.roomId = vm.roomId;
 				}
 			});
 
@@ -61,21 +65,20 @@
 			});
 
 			$q.all([checkRoom, checkTeacher]).then(function() {
-				if(teacher == undefined || room == undefined) return;
+				if(teacher == undefined || vm.roomId == undefined) return;
 
-				socket = io.connect(config.socketIoURL,{query: 
-					"roomId=" + room.roomId + 
+				socket = io.connect("/",{query: 
+					"roomId=" + vm.roomId + 
 					"&token=" + teacher.token + 
 					"&type=teacher"});
 
-				setupSocket($timeout, socket, toaster);
+				setupSocket($scope, $state, $timeout, socket, toaster, vm);
 			});
 
 			vm.dynamicAnswers = [];
 
 			vm.addRow = function() {
-				var newLength = vm.dynamicAnswers.length + 1;
-				vm.dynamicAnswers.push({id: newLength, value: ""});
+				vm.dynamicAnswers.push({id: vm.dynamicAnswers.length, value: ""});
 			};
 
 			vm.removeRow = function() {
@@ -90,48 +93,115 @@
 			//Functions
 			vm.submitQuestion = function(){
 				var toSend = {};
+				toSend.possibleMultipleAnswers = [];
 				toSend.question = vm.question;
-				toSend.answer = {};
-				toSend.answer.type = vm.typeAnswer;
-				toSend.answer.possibleAnswer = {};
+				toSend.answerType = vm.typeAnswer;
 				if(vm.typeAnswer == 'text'){
-					toSend.answer.possibleAnswer[0] = {id: 0, value: vm.correctTextAnswer};
-					toSend.answer.correctAnswer = 0;
+					toSend.correctTextAnswer = vm.correctTextAnswer;
 				}else if(vm.typeAnswer == 'multipleAnswer'){
 					for(var dynamicAnswer of vm.dynamicAnswers){
-						toSend.answer.possibleAnswer[dynamicAnswer.id] = dynamicAnswer;
+						toSend.possibleMultipleAnswers[dynamicAnswer.id] = {id: dynamicAnswer.id, value: dynamicAnswer.value};
 					}
-					toSend.answer.correctAnswer = vm.correctMultipleAnswer;
+					toSend.correctMultipleAnswer = vm.correctMultipleAnswer;
 				}
 				
 				toSend.isAutocheck = vm.autoCheck;
+
 				socket.emit('question', toSend);
-				socket.to(room.roomId).emit('question', toSend);
-				console.log(toSend);
+			}
+			vm.closeQuestion = function(){
+				socket.emit('close_question');
+			};
+			vm.closeRoom = function(){
+				socket.emit('close_room');
 			}
 		}
-		function setupSocket($timeout, socket, toaster){
+		function setupSocket($scope, $state, $timeout, socket, toaster, vm){
+
+			socket.on('init_room', function(initRoom){
+				$scope.$apply(function(){
+					vm.room = initRoom;
+					console.log(vm.room);
+				});
+			})
 
 			//Use timeout to let the toaster pop, toaster doesn't show if not
 			socket.on('info', function(info){
 				console.log(info);
-				$timeout(toaster.pop('info', 'From socket', info), 100);
+				$scope.$apply(function(){
+					toaster.pop('info', 'Information', info);
+				});
+			});
+
+			socket.on('basic_error', function(error){
+				$scope.$apply(function(){
+					toaster.pop('warning', 'Error', error);
+				});
 			});
 
 			socket.on('critical_error', function(error){
 				console.log(error);
-				$timeout(100)
-				.then(function(promise){
-					toaster.pop('error', 'From socket', error);
-					//$state.go('teacherprofile');
+				socket.disconnect();
+				$scope.$apply(function(){
+					toaster.pop('error', 'Critical error', error);
+					$state.go('teacherprofile');
 				});
 			});
 
 			socket.on('disconnect', function(info){
-				console.log("Disconnected");
 				socket.disconnect();
+				$scope.$apply(function(){
+					toaster.pop('warning', 'Disconnected', "Disconnected");
+					$state.go('teacherprofile');
+				});
 			});
 
-		}
+			socket.on('question', function(question){
+				console.log("received question");
+				console.log(question);
+				$scope.$apply(function(){
+					vm.room.currentQuestion = question;
+				});
+				console.log(vm.room);
+			});
+			
+			socket.on('student_connected', function(student){
+				$scope.$apply(function(){
+					vm.room.students.push(student);	
+				});
+			});
 
+			socket.on('student_disconnected', function(newListOfStudents){
+				$scope.$apply(function(){
+					vm.room.connectedStudents = newListOfStudents;
+				});
+			});
+
+			socket.on('student_answer', function(answer){
+				$scope.$apply(function(){
+					console.log("Received answer");
+					console.log(answer);
+					if(vm.room.currentQuestion.studentAnswers === undefined){
+						vm.room.currentQuestion.studentAnswers = [];
+					}
+					vm.room.currentQuestion.studentAnswers.push(answer);
+				});
+			});
+
+			socket.on('close_question', function(updatedRoom){
+				$scope.$apply(function(){
+					console.log("Received close question");
+					vm.room = updatedRoom;
+					console.log(vm.room);
+				});
+			});
+
+			socket.on('close_room', function(){
+				socket.disconnect();
+				$scope.$apply(function(){
+					toaster.pop('info', "Room closed", "You closed this room! You can now only access in your profile page!");
+					return $state.go('teacherprofile');
+				});
+			})
+		}
 })();

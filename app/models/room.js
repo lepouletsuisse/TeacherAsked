@@ -8,10 +8,12 @@ var RoomSchema = new Schema({
     className: {type: String, required: true},
     numberParticipants: {type: Number, required: true},
     date: {type: Date, required: true, default: Date.now},
-    students: {type: [{type: Schema.Types.ObjectId, ref: 'Student'}]},
+    students: {type: [String], default: []},
+    connectedStudents: {type: [String], default: []},
     teacher: {type: Schema.Types.ObjectId, ref: 'Teacher', required: true, autopopulate: true},
-    questions: {type: [{type: Schema.Types.ObjectId, ref: 'Question'}]},
-    isOpen: {type: Boolean, required: true, default: true}
+    questions: {type: [{type: Schema.Types.ObjectId, ref: 'Question'}], autopopulate: true},
+    isOpen: {type: Boolean, required: true, default: true},
+    currentQuestion: {type: Schema.Types.ObjectId, ref: 'Question', autopopulate: true}
 });
 RoomSchema.plugin(autopopulate);
 

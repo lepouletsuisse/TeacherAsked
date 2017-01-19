@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
 
 var StudentAnswerSchema = new Schema({
     answer: {type: String, required: true},
-    student: {type: Schema.Types.ObjectId, ref: 'Student', required: true},
-    date: {type: Date, required: true}
+    student: {type: String, required: true},
+    date: {type: Date, default: Date.now, required: true}
 });
 
 mongoose.model('StudentAnswer', StudentAnswerSchema);

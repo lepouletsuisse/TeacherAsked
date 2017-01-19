@@ -55,6 +55,22 @@
 					.catch(function(res){
 						return res;		
 					});
+				},
+				
+				getExistingRoom: function(token){
+					return $http({
+						url: apiBaseURL + "/rooms/teacher/open", 
+						method: "GET", 
+						params: {
+							"token": token
+						},
+					})
+					.then(function(res){
+						return res;
+					})
+					.catch(function(res){
+						return res;		
+					});
 				}
 			}
 		}

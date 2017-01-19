@@ -9,6 +9,6 @@
 	 * Module of the app
 	 */
 
-  	angular.module('roomstudent', ['ngStorage', 'toaster']);
+  	angular.module('roomstudent', ['ngStorage', 'toaster', 'chart.js']);
 
 })();

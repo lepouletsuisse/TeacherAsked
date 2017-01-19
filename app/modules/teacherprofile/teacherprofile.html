@@ -25,6 +25,11 @@
                     </tr>
                     </table>
                 </form>
+            <span ng-if="vm.existingRooms.length > 0">
+                <h4>Join a open room</h4>
+                <div ng-repeat="room in vm.existingRooms"><a class="room-link" ng-click="vm.joinRoom(room.roomId)">{{room.roomId}}: {{room.className}}</a></div>
+            </span>
+            
         </div>
 
         <div class="second-column">

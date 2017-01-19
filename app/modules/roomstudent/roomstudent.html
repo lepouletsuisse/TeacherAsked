@@ -5,54 +5,71 @@
     
     <section class="main-content">
       <h3>
-        <span aria-hidden="true" class="octicon octicon-link">Welcome <span class="student-username" ng-bind-html="vm.studentUsername"></span> in the room <span class="room-id" ng-bind-html="vm.roomId"></span><div>Your teacher asked:</div></span>
+        <span aria-hidden="true" class="octicon octicon-link">Welcome {{vm.studentUsername}} in the room <span class="room-id" ng-bind-html="vm.roomId"></span>
+        </span>
       </h3>
+      <span ng-if="vm.room.currentQuestion !== undefined">
+        <div aria-hidden="true" class="octicon octicon-link">Your teacher asked:</div>
+        <h4 class="currentQuestion-text">{{vm.room.currentQuestion.question}}</h4>
+        <div class="answerStudent" ng-init="vm.answered=false" ng-if="!vm.answered">
+          <form ng-submit="vm.submitSingle()" ng-if="vm.room.currentQuestion.answerType == 'text'">
+            <input size="35" class="answerStudent-input" type="text" ng-model="vm.answerText"><br><br>
+            <button class="answerStudent-button" type="submit">Submit</button>
+          </form> 
+          <form ng-submit="vm.submitMultiple()" ng-if="vm.room.currentQuestion.answerType == 'multipleAnswer'">
+            <div class="btn-group">
+            <span class="radio-answers" ng-repeat="answer in vm.room.currentQuestion.possibleMultipleAnswers"><button type="button" class="btn btn-primary" name="radioGroup-answers" value="{{answer.id}}" ng-click="vm.clickMultiple(this.answer.id)">{{answer.value}}</span>
+            </div>
+            </br><button class="answerStudent-button" type="submit">Submit</button>
+          </form>
+        </div>
+        <h3 ng-if="vm.answered">You answered with:
+          <div class="no-check-answer">{{vm.answer}}</div>
+        </h3>
+      </span>
+      <span ng-if="vm.room.currentQuestion === undefined">
+        <div>Your teacher didn't ask any question yet. Please wait a moment!</div>
+      </span>
 
-      <h4 class="currentQuestion-text">Do you love cats?</h4>
-      <!--<div class="answerStudent">
-        <input size="35" class="answerStudent-input" type="text" value="Could be an other type of input"><br><br>
-        <button class="answerStudent-button" onclick="">Submit</button>
-      </div>-->
-      <h3>You answered with:
-        <div class="no-check-answer">Nope</div>
-      </h3>
-      <!--<h3>The correct answer was: 
-        <div class="currentQuestion-text">I love cats!</div>
-      </h3>
-      
-      <h4>Statisitics</h4>
-      <div class="columns">
-        <div class="first-column">
-          <table class="statistics1-table">
-            <tr>
-              <td>Here it is a graph of the good/false response</td><td>Here it is a list of good/bad answer</td>
+      <span ng-if="vm.room.questions.length > 0">
+        </br>
+        <h3 ng-init="vm.lastQuestion = vm.room.questions[vm.room.questions.length-1]">Statisitics for the last question</h3>
+        <div class="lastQuestion-text">{{vm.lastQuestion.question}}</div>
+        <h4 class="correctAnswer-text" ng-if="vm.lastQuestion.isAutocheck">The correct answer was: 
+          <div class="table-center-div">
+          <table class="table-center">
+            <tr class="possibleAnswers" ng-if="vm.lastQuestion.answerType == 'multipleAnswer'" ng-repeat="possibleAnswer in vm.lastQuestion.possibleMultipleAnswers">
+              <td><i ng-if="possibleAnswer.id != vm.lastQuestion.correctMultipleAnswer && vm.checkIsAnswer(vm.lastQuestion, possibleAnswer)" class="material-icons wrongAnswer">clear</i><i ng-if="possibleAnswer.id == vm.lastQuestion.correctMultipleAnswer" class="material-icons correctAnswer">done</i></td><td> {{possibleAnswer.value}}</td>
             </tr>
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
+            <tr class="correctAnswer" ng-if="vm.lastQuestion.answerType == 'text'">
+              <td></td><td>{{vm.lastQuestion.correctTextAnswer}}</td>
             </tr>
           </table>
-        </div>
-        <div class="second-column">
-          <table class="statistics2-table">
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-            </tr>
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-            </tr>
-          </table>
-        </div>
-      </div>-->
-
-      <h4>Answers</h4>
-      <table class="answer-table">
-        <tr>
-          <td>11:36 Jean-kevin:</td><td>I love cats!</td>
-        </tr>
-        <tr>
-          <td>11:38 Terminator:</td><td>Nope</td>
-        </tr>
-      </table>
+          </div>
+        </h4>
+        <span ng-="oldQuestion in vm.room.questions">
+          <div class="columns">
+            <div class="first-column">
+              <table class="statistics1-table">
+                <tr ng-repeat="answer in oldQuestion.studentAnswers">
+                 <td><span class="answer-date">{{answer.date.substring(11,19)}}</span> {{answer.student}}:</td><td>{{answer.answer}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="second-column">
+              <canvas 
+                id="line" 
+                class="chart chart-line" 
+                chart-data="vm.data"
+                chart-labels="vm.labels" 
+                chart-series="vm.series" 
+                chart-options="vm.options">
+            </canvas>
+            </div>
+          </div>
+        </span>
+    
+      </span>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/lepouletsuisse/TeacherAsked">TeacherAsked</a> is maintained by <a href="https://github.com/lepouletsuisse">lepouletsuisse</a>.</span>

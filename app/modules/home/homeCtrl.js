@@ -64,16 +64,11 @@
 				HomeService.checkRoom(vm.roomId)
 				.then(function(resRoom){
 					if(resRoom.status == 200){
-						HomeService.createStudent(vm.usernameStudent)
-						.then(function(resStudent){
-							if(resStudent.status == 201){
-								$localStorage.token = resStudent.data.token;
-								return $state.go('roomstudent', {roomId: resRoom.data.roomId});
-								
-							}else{
-								toaster.pop('error', "Student", resStudent.data);
-							}
-						});
+						if(resRoom.data.isOpen == false){
+							toaster.pop("warning", "Student", "This room is closed!");
+							return;
+						}
+						return $state.go('roomstudent', {roomId: resRoom.data.roomId, username: vm.usernameStudent});
 					}else{
 						toaster.pop('error', 'Student', resRoom.data);
 					}

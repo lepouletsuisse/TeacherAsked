@@ -8,7 +8,7 @@
         <span aria-hidden="true" class="octicon octicon-link">Welcome in the room <span class="room-id" ng-bind-html="vm.roomId">4242</span></span>
       </h3>
 
-      <div class="columns">
+      <div class="columns" ng-if="vm.room.currentQuestion === undefined">
         <div class="first-column">
           <h4>Ask a question</h4>
           <form ng-submit="vm.submitQuestion()" name="question-form">
@@ -18,14 +18,14 @@
               </tr>
               <tr>
                 <td><label>Type of answer</label></td><td>
-                  <select name="typeAnswer" ng-model="vm.typeAnswer">
+                  <select name="typeAnswer" ng-model="vm.typeAnswer" vm-init="vm.typeAnswer='text'">
                     <option value="text" selected>Text</option>
                     <option value="multipleAnswer">Multiple choice</option>
                   </select>
                 </td>
               </tr>
               <tr ng-if="vm.typeAnswer=='text'">
-                <td><label>Correct answer</label></td><td><input type="text" name="correctTextAnswer" ng-model="vm.correctTextAnswer" ng-init="vm.correctMultipleAnswer='1'"></td>
+                <td><label>Correct answer</label></td><td><input type="text" name="correctTextAnswer" ng-model="vm.correctTextAnswer" ng-init="vm.correctMultipleAnswer='0'"></td>
               </tr>
               <tr ng-if="vm.typeAnswer=='multipleAnswer'">
                 <td><label>Answer multiple</label></td><td><button type="button" ng-click="vm.addRow()">Add</button><button type="button" ng-click="vm.removeRow()">Remove</button></td>
@@ -55,49 +55,62 @@
             <h4>Connected students</h4>
             <table class="student-table" ng-repeat="student in vm.room.students">
                 <tr>
-                  <td><a href="#">{{student.username}} (Logged at {{student.loginTimestamp}})</a></td>
+                  <td><a href="">{{student}}</a></td>
                 </tr>
             </table>
         </div>
       </div>
-
-      <h3 class="currentQuestion-text">Do you love cats?</h3>
-      <div class="close-button">
-        <button value="Close the current question" onclick="">Close the current question</button>
+      <div ng-if="vm.room.currentQuestion !== undefined">
+        <h4>Connected students</h4>
+        <table class="student-table" ng-repeat="student in vm.room.students">
+            <tr>
+              <td><a href="">{{student}}</a></td>
+            </tr>
+        </table>
       </div>
-      <label class="hideAnswer-label">Hide the real-time answers</label><input type="checkbox" class="hideAnswer-checkbox" checked>
-      <table class="answer-table">
-        <tr>
-          <td>11:36 Jean-kevin:</td><td>I love cats!</td>
-        </tr>
-        <tr>
-          <td>11:38 Terminator:</td><td>Nope</td>
-        </tr>
-      </table>
+      
+      <button ng-if="vm.room.currentQuestion === undefined" ng-click="vm.closeRoom()">Close the room</button>
+      <span ng-if="vm.room.currentQuestion !== undefined">
+        <h3 class="currentQuestion-text">{{vm.room.currentQuestion.question}}</h3>
+        <div class="close-button">
+          <button ng-click="vm.closeQuestion()">Close the current question</button>
+        </div>
+        <!--<button type="button" class="btn btn-primary" data-toggle="button" ng-init="vm.hideAnswer = true" ng-model="vm.hideAnswer" clicked>
+          Hide students answers
+        </button>-->
+        <label class="hideAnswer-label">Hide students answers</label><input type="checkbox" ng-init="vm.hideAnswer = true" ng-model="vm.hideAnswer" class="hideAnswer-checkbox" checked>
+        <table class="answer-table" ng-if="!vm.hideAnswer">
+          <tr ng-repeat="answer in vm.room.currentQuestion.studentAnswers track by $index">
+            <td><span class="answer-date">{{answer.date.substring(11,19)}}</span> {{answer.student}}:</td><td>{{answer.answer}}</td>
+          </tr>
+        </table>
+      </span>
 
-      <h4>Statistics (Section appears when the question is closed)</h4>
-      <div class="columns">
-        <div class="first-column">
-          <table class="statistics1-table">
-            <tr>
-              <td>Here it is a graph of the good/false response</td><td>Here it is a list of good/bad answer</td>
-            </tr>
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-            </tr>
-          </table>
+      <span ng-if="vm.room.questions.length > 0">
+        <h4>Statistics</h4>
+        <div class="columns">
+          <div class="first-column">
+            <canvas 
+                id="line" 
+                class="chart chart-line" 
+                chart-data="vm.data"
+                chart-labels="vm.labels" 
+                chart-series="vm.series" 
+                chart-options="vm.options">
+            </canvas>
+          </div>
+          <div class="second-column">
+            <table class="statistics2-table">
+              <tr>
+                <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
+              </tr>
+              <tr>
+                <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
+              </tr>
+            </table>
+          </div>
         </div>
-        <div class="second-column">
-          <table class="statistics2-table">
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-            </tr>
-            <tr>
-              <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      </span>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/lepouletsuisse/teacherasked">TeacherAsked</a> is maintained by <a href="https://github.com/lepouletsuisse">lepouletsuisse</a>.</span>

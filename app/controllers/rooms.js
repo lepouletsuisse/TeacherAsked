@@ -38,6 +38,74 @@ router.get('/', function(req, res, next){
     });
 });
 
+router.get('/teacher', function(req, res, next){
+    var queryToken = req.query.token;
+    var ok = true;
+    Teacher.findOne({token: queryToken}, function(err, teacher){
+        if(err) {
+            ok = false;
+            return res.status(500).json(err);
+        }else if(teacher == null){
+            ok = false;
+            return res.status(401).json("Token not valid");
+        }else{
+            return teacher;
+        }
+    }).then(function(teacher){
+        if(!ok) return;
+        Room.find({teacher: teacher._id}, function(err, rooms){
+            if(err){
+                if(err.name === "ValidationError"){
+                    return res.status(422).json("Invalid data");
+                } else if(err.name === "CastError" && err.message.startsWith("Cast to number failed")){
+                    return res.status(422).json("Room Id should be a number!");
+                }else{
+                    console.log(err);
+                    return res.status(500).json("Unknow error!");
+                }
+            }else if(rooms == null){
+                return res.status(401).json("No rooms for this teacher!");
+            }else{
+                return res.status(200).json(rooms);
+            }
+        });
+    });
+});
+
+router.get('/teacher/open', function(req, res, next){
+    var queryToken = req.query.token;
+    var ok = true;
+    Teacher.findOne({token: queryToken}, function(err, teacher){
+        if(err) {
+            ok = false;
+            return res.status(500).json(err);
+        }else if(teacher == null){
+            ok = false;
+            return res.status(401).json("Token not valid");
+        }else{
+            return teacher;
+        }
+    }).then(function(teacher){
+        if(!ok) return;
+        Room.find({teacher: teacher._id, isOpen: true}, function(err, rooms){
+            if(err){
+                if(err.name === "ValidationError"){
+                    return res.status(422).json("Invalid data");
+                } else if(err.name === "CastError" && err.message.startsWith("Cast to number failed")){
+                    return res.status(422).json("Room Id should be a number!");
+                }else{
+                    console.log(err);
+                    return res.status(500).json("Unknow error!");
+                }
+            }else if(rooms == null){
+                return res.status(401).json("No rooms for this teacher!");
+            }else{
+                return res.status(200).json(rooms);
+            }
+        });
+    });
+});
+
 router.post('/', function(req, res, next){
 
     var teacherToken = req.body.token;

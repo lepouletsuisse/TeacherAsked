@@ -24,7 +24,7 @@
 				//Login
 				getTeacher: function(token){
 					return $http({
-						url: apiBaseURL + "/teachers", 
+						url: "/teachers", 
 						method: "GET", 
 						params: {
 							"token": token
