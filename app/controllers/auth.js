@@ -1,6 +1,6 @@
 var config = require('../../config/config.js');
 var express = require('express');
-var MongoClient = require("mongodb").MongoClient;
+//var MongoClient = require("mongodb").MongoClient;
 var request = require("request-promise");
 var app = express();
 var router = express.Router();

@@ -28,7 +28,7 @@
 			vm.firstname = "";
 			vm.lastname = "";
 			vm.className = "";
-			vm.numberParticipants = "";
+			vm.numberParticipants = "0";
 
 			//Check if the user is allow to come on this page
 			if($localStorage.token == undefined){
