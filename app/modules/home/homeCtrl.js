@@ -44,6 +44,7 @@
 					}else if(res.status == 401){
 						toaster.pop('error', "Login", res.data);
 					}else{
+						console.log();
 						toaster.pop('error', "Login", "An error occured while connecting to the server!");
 					}
 				});

@@ -31,8 +31,10 @@
 			var currentRoomId = $stateParams.roomId;
 			var room;
 			var socket;
-			vm.data = [[0]];
-			vm.labels = [""];
+			vm.labelsCheckAnswers = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+  			vm.dataCheckAnswers = [300, 500, 100];
+			vm.labelsAnswers = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+  			vm.dataAnswers = [300, 500, 100];
 
 			if(vm.studentUsername == ""){
 				if($localStorage.username === undefined || $localStorage.username == ""){
