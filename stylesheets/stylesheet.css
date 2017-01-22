@@ -1,23 +1,13 @@
 * {
   box-sizing: border-box; }
 
-html {
-  padding: 0;
-  margin: 0;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957);  }
-
 body {
   padding: 0;
   margin: 0;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957);  }
+  color: #606c71; }
 
 a {
   color: #1e6bb8;
@@ -25,127 +15,16 @@ a {
   a:hover {
     text-decoration: underline; }
 
-.radio-answers{
-  font-size: 16px;
+.are-you{
+  font-size: 40px;
+  color: lightseagreen;
+  text-align: center;
+}
+
+.mockup{
   font-weight: bold;
-}
-
-.possibleAnswers{
-  color:black;
-}
-
-.room-link{
-  cursor: pointer;
-}
-
-.hideAnswer-checkbox{
-  width: 16px;
-  height: 16px;
-}
-
-.multipleAnswer{
-  font-size: 14px;
+  text-align: center;
   color: grey;
-}
-
-.login-button{
-}
-
-.no-check-answer{
-  color:black !important;
-}
-
-.room-id{
-  color:blueviolet;
-  font-size: 24px;
-  text-decoration: underline;
-}
-
-.columns{
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.first-column{
-  width: 50%;
-  flex-grow: 1;
-  float: left;
-  border-right: 1px solid black;
-  padding-right: 10px;
-}
-
-.second-column{
-  width: 50%;
-  flex-grow: 1;
-  float: right;
-  border-left: 1px solid black;
-  padding-left: 10px;
-}
-
-.currentQuestion-text{
-  font-size: 40px;
-  color: darkslateblue !important;
-}
-
-.lastQuestion-text{
-  color: darkslateblue;
-  font-size: 20px;
-  text-align: center;
-}
-
-.correctAnswer-text{
-  text-align: left !important;
-}
-
-.chart-container{
-  width: 250px;
-}
-
-.table-center{
-  margin-left: auto;
-  margin-right: auto;
-}
-.table-center td{
-  text-align: center;
-}
-
-.table-center-div{
-  text-align: center;
-}
-
-.goodAnswer{
-  font-size: 40px;
-  color: green;
-}
-
-.badAnswer{
-  font-size: 40px;
-  color:red !important;
-}
-
-.answerStudent{
-  text-align: center;
-}
-button{
-  min-width: 100px;
-}
-
-.answerStudent-input{
-  text-align: center;
-}
-
-.hideAnswer-label{
-  color: darkred;
-}
-
-.answer-table{
-}
-
-.close-button{
-  text-align: center;
 }
 
 .btn {
@@ -185,43 +64,14 @@ button{
     .btn + .btn {
       margin-top: 1rem;
       margin-left: 0; } }
-.btn{
-  padding: 10px;
-  background-color: #bdc3c7;
-  color: black;
-}
-.btn-group{
-  margin: 10px;
-}
-
-.btn-primary:hover{
- background-color: #2ecc71;
- color: white;
-}
-.btn-primary:active{
-  background-color: #2980b9;
-  color: white;
-}
 
 .page-header {
   color: #fff;
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: 10px;
-  border: 0px}
+  background-color: #159957;
+  background-image: linear-gradient(120deg, #155799, #159957); }
 
-.answer-date{
-  color:grey;
-}
-
-.correctAnswer{
-  color:limegreen;
-}
-
-.wrongAnswer{
-  color:red;
-}
-/*@media screen and (min-width: 64em) {
+@media screen and (min-width: 64em) {
   .page-header {
     padding: 5rem 6rem; } }
 
@@ -232,7 +82,7 @@ button{
 @media screen and (max-width: 42em) {
   .page-header {
     padding: 2rem 1rem; } }
-*/
+
 .project-name {
   margin-top: 0;
   margin-bottom: 0.1rem; }
@@ -274,9 +124,7 @@ button{
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: normal;
-  color: #159957; 
-  text-align: center;
-  }
+  color: #159957; }
 .main-content p {
   margin-bottom: 1em; }
 .main-content code {
@@ -344,16 +192,12 @@ button{
   width: 100%;
   overflow: auto;
   word-break: normal;
-  word-break: keep-all; 
-  }
+  word-break: keep-all; }
   .main-content table th {
     font-weight: bold; }
   .main-content table th, .main-content table td {
     padding: 0.5rem 1rem;
-    /*border: 1px solid #e9ebec;*/ }
-  .main-content table td div{
-    text-align: center;
-  }
+    border: 1px solid #e9ebec; }
 .main-content dl {
   padding: 0; }
   .main-content dl dt {
@@ -370,7 +214,6 @@ button{
   margin: 1rem 0;
   background-color: #eff0f1;
   border: 0; }
-
 
 @media screen and (min-width: 64em) {
   .main-content {
@@ -389,12 +232,7 @@ button{
     padding: 2rem 1rem;
     font-size: 1rem; } }
 
-.main-content{
-  background-color: lightgray;
-  margin-bottom: 100px;
-}
 .site-footer {
-  clear:both; 
   padding-top: 2rem;
   margin-top: 2rem;
   border-top: solid 1px #eff0f1; }
