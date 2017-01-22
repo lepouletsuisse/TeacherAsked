@@ -35,20 +35,20 @@
         </br>
         <h3 ng-init="vm.lastQuestion = vm.room.questions[vm.room.questions.length-1]">Statisitics for the last question</h3></br>
         <div class="lastQuestion-text">{{vm.lastQuestion.question}}</div>
-        <h4 class="correctAnswer-text" ng-if="vm.lastQuestion.isAutocheck">The correct answer was: 
-          <div class="table-center-div">
-          <table class="table-center">
-            <tr class="possibleAnswers" ng-if="vm.lastQuestion.answerType == 'multipleAnswer'" ng-repeat="possibleAnswer in vm.lastQuestion.possibleMultipleAnswers track by $index">
-              <td><i ng-if="possibleAnswer.id != vm.lastQuestion.correctMultipleAnswer && vm.checkIsAnswer(vm.lastQuestion, possibleAnswer)" class="material-icons wrongAnswer">clear</i><i ng-if="possibleAnswer.id == vm.lastQuestion.correctMultipleAnswer" class="material-icons correctAnswer">done</i></td><td> {{possibleAnswer.value}}</td>
-            </tr>
-            <tr class="correctAnswer" ng-if="vm.lastQuestion.answerType == 'text'">
-              <td></td><td>{{vm.lastQuestion.correctTextAnswer}}</td>
-            </tr>
-          </table>
-          </div>
-        </h4>
           <div class="columns">
             <div class="first-column">
+              <h4 class="correctAnswer-text" ng-if="vm.lastQuestion.isAutocheck">The correct answer was: 
+                <div class="table-center-div">
+                <table class="table-center">
+                  <tr class="possibleAnswers" ng-if="vm.lastQuestion.answerType == 'multipleAnswer'" ng-repeat="possibleAnswer in vm.lastQuestion.possibleMultipleAnswers track by $index">
+                    <td><i ng-if="possibleAnswer.id != vm.lastQuestion.correctMultipleAnswer && vm.checkIsAnswer(vm.lastQuestion, possibleAnswer)" class="material-icons wrongAnswer">clear</i><i ng-if="possibleAnswer.id == vm.lastQuestion.correctMultipleAnswer" class="material-icons correctAnswer">done</i></td><td> {{possibleAnswer.value}}</td>
+                  </tr>
+                  <tr class="correctAnswer" ng-if="vm.lastQuestion.answerType == 'text'">
+                    <td></td><td>{{vm.lastQuestion.correctTextAnswer}}</td>
+                  </tr>
+                </table>
+                </div>
+              </h4>
               <table class="statistics1-table">
                 <tr ng-repeat="answer in vm.lastQuestion.studentAnswers track by $index" ng-if="vm.lastQuestion.answerType == 'text'">
                  <td><span class="answer-date">{{answer.date.substring(11,19)}}</span> {{answer.student}}:</td><td>{{answer.answer}}</td>
