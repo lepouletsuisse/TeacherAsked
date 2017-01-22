@@ -27,8 +27,14 @@
 
 			vm.typeAnswer = "text";
 
-			vm.data = [[0]];
-			vm.labels = [""];
+			vm.labelsCheckAnswers = ["No data"];
+  			vm.dataCheckAnswers = [0];
+			vm.labelsAnswers = ["No data"];
+  			vm.dataAnswers = [0];
+			vm.optionsCheckAnswers = {
+
+			};
+			vm.colorsCheckAnswers = ['#2EFE2E', '#FF0000'];
 
 			var currentRoomId = $stateParams.roomId;
 			var teacher;
@@ -115,13 +121,72 @@
 			vm.closeRoom = function(){
 				socket.emit('close_room');
 			}
+			
 		}
+		
+		function updateChart(vm){
+			if(vm.lastQuestion === undefined) return;
+			var answers = {};
+			vm.lastQuestion.studentAnswers.some(function(answer){
+
+				if(answers[answer.answer] === undefined){
+					answers[answer.answer] = {};
+					answers[answer.answer].answer = answer.answer;
+					answers[answer.answer].count = 1;
+				}else{
+					answers[answer.answer].count = answers[answer.answer].count + 1;
+				}
+			});
+			
+			//global Answers			
+			vm.labelsAnswers = [];
+			vm.dataAnswers = [];
+			for(var key in answers){
+				var answer = answers[key];
+				vm.labelsAnswers.push(answer.answer);
+				vm.dataAnswers.push(answer.count);
+			}
+
+			//Correct answers
+			vm.dataCheckAnswers = [];
+			vm.labelsCheckAnswers = ["Correct answer", "Wrong answer"];
+			
+			var correctAnswerCount = 0;
+			var wrongAnswerCount = 0;
+			if(vm.lastQuestion.answerType == "multipleAnswer" && vm.lastQuestion.isAutocheck){
+				console.log("multiple");
+				var correctAnswer = vm.lastQuestion.possibleMultipleAnswers[vm.lastQuestion.correctMultipleAnswer].value;
+				for(var key in answers){
+					var answer = answers[key];
+					if(answer.answer == correctAnswer){
+						correctAnswerCount = answer.count;
+					}else{
+						wrongAnswerCount = wrongAnswerCount + answer.count;
+					}
+				}
+			}else if(vm.lastQuestion.answerType == "text" && vm.lastQuestion.isAutocheck){
+				var correctAnswer = vm.lastQuestion.correctTextAnswer;
+				for(var key in answers){
+					var answer = answers[key];
+					if(answer.answer.toLowerCase() == correctAnswer.toLowerCase()){
+						correctAnswerCount = answer.count;
+					}else{
+						wrongAnswerCount = wrongAnswerCount + answer.count;
+					}
+				}
+			}
+			vm.dataCheckAnswers = [correctAnswerCount, wrongAnswerCount];
+		}
+
 		function setupSocket($scope, $state, $timeout, socket, toaster, vm){
 
 			socket.on('init_room', function(initRoom){
 				$scope.$apply(function(){
 					vm.room = initRoom;
-					console.log(vm.room);
+					if(vm.lastQuestion === undefined && vm.room.questions.length > 0){
+						vm.lastQuestion = vm.room.questions[vm.room.questions.length - 1];
+					}
+					updateChart(vm);
 				});
 			})
 
@@ -157,8 +222,6 @@
 			});
 
 			socket.on('question', function(question){
-				console.log("received question");
-				console.log(question);
 				$scope.$apply(function(){
 					vm.room.currentQuestion = question;
 				});
@@ -167,7 +230,9 @@
 			
 			socket.on('student_connected', function(student){
 				$scope.$apply(function(){
-					vm.room.students.push(student);	
+					if(vm.room.connectedStudents.indexOf(student.username) == -1){
+						vm.room.connectedStudents.push(student);	
+					}
 				});
 			});
 
@@ -179,8 +244,6 @@
 
 			socket.on('student_answer', function(answer){
 				$scope.$apply(function(){
-					console.log("Received answer");
-					console.log(answer);
 					if(vm.room.currentQuestion.studentAnswers === undefined){
 						vm.room.currentQuestion.studentAnswers = [];
 					}
@@ -190,9 +253,9 @@
 
 			socket.on('close_question', function(updatedRoom){
 				$scope.$apply(function(){
-					console.log("Received close question");
 					vm.room = updatedRoom;
-					console.log(vm.room);
+					vm.lastQuestion = vm.room.questions[vm.room.questions.length - 1];
+					updateChart(vm);
 				});
 			});
 

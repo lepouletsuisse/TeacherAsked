@@ -24,19 +24,19 @@
                   </select>
                 </td>
               </tr>
-              <tr ng-if="vm.typeAnswer=='text'">
+              <tr ng-if="vm.typeAnswer=='text' && vm.autoCheck">
                 <td><label>Correct answer</label></td><td><input type="text" name="correctTextAnswer" ng-model="vm.correctTextAnswer" ng-init="vm.correctMultipleAnswer='0'"></td>
               </tr>
               <tr ng-if="vm.typeAnswer=='multipleAnswer'">
                 <td><label>Answer multiple</label></td><td><button type="button" ng-click="vm.addRow()">Add</button><button type="button" ng-click="vm.removeRow()">Remove</button></td>
               </tr>
-              <tr ng-repeat="element in vm.dynamicAnswers" ng-if="vm.typeAnswer=='multipleAnswer'">
+              <tr ng-repeat="element in vm.dynamicAnswers track by $index" ng-if="vm.typeAnswer=='multipleAnswer'">
                 <td class="multipleAnswer">Answer {{element.id}}</td><td><input type="text" name="answer" ng-model="element.value"></td>
               </tr>
-              <tr ng-if="vm.typeAnswer=='multipleAnswer'">
+              <tr ng-if="vm.typeAnswer=='multipleAnswer' && vm.autoCheck">
                 <td>Correct answer</td>
                   <td><select name="correctMultipleAnswer" ng-model="vm.correctMultipleAnswer">
-                  <option ng-repeat="element in vm.dynamicAnswers" value="{{element.id}}">Answer {{element.id}}</option>
+                  <option ng-repeat="element in vm.dynamicAnswers track by $index" value="{{element.id}}">Answer {{element.id}}</option>
                   </select>
                 </td>
               </tr>
@@ -53,7 +53,7 @@
         </div>
         <div class="second-column">
             <h4>Connected students</h4>
-            <table class="student-table" ng-repeat="student in vm.room.students">
+            <table class="student-table" ng-repeat="student in vm.room.connectedStudents track by $index">
                 <tr>
                   <td><a href="">{{student}}</a></td>
                 </tr>
@@ -62,7 +62,7 @@
       </div>
       <div ng-if="vm.room.currentQuestion !== undefined">
         <h4>Connected students</h4>
-        <table class="student-table" ng-repeat="student in vm.room.students">
+        <table class="student-table" ng-repeat="student in vm.room.connectedStudents track by $index">
             <tr>
               <td><a href="">{{student}}</a></td>
             </tr>
@@ -87,30 +87,61 @@
       </span>
 
       <span ng-if="vm.room.questions.length > 0">
-        <h4>Statistics</h4>
-        <div class="columns">
-          <div class="first-column">
-            <canvas 
-                id="line" 
-                class="chart chart-line" 
-                chart-data="vm.data"
-                chart-labels="vm.labels" 
-                chart-series="vm.series" 
-                chart-options="vm.options">
-            </canvas>
+        </br>
+        <h3 ng-init="vm.lastQuestion = vm.room.questions[vm.room.questions.length-1]">Statisitics for the last question</h3></br>
+        <div class="lastQuestion-text">{{vm.lastQuestion.question}}</div>
+        <h4 class="correctAnswer-text" ng-if="vm.lastQuestion.isAutocheck">The correct answer was: 
+          <div class="table-center-div">
+          <table class="table-center">
+            <tr class="possibleAnswers" ng-if="vm.lastQuestion.answerType == 'multipleAnswer'" ng-repeat="possibleAnswer in vm.lastQuestion.possibleMultipleAnswers track by $index">
+              <td><i ng-if="possibleAnswer.id == vm.lastQuestion.correctMultipleAnswer" class="material-icons correctAnswer">done</i></td><td> {{possibleAnswer.value}}</td>
+            </tr>
+            <tr class="correctAnswer" ng-if="vm.lastQuestion.answerType == 'text'">
+              <td></td><td>{{vm.lastQuestion.correctTextAnswer}}</td>
+            </tr>
+          </table>
           </div>
-          <div class="second-column">
-            <table class="statistics2-table">
-              <tr>
-                <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-              </tr>
-              <tr>
-                <td>Here it is some more statistics</td><td>Here it is some more statistics</td>
-              </tr>
-            </table>
+        </h4>
+          <div class="columns">
+            <div class="first-column">
+              <table class="statistics1-table">
+                <tr ng-repeat="answer in vm.lastQuestion.studentAnswers track by $index" ng-if="vm.lastQuestion.answerType == 'text'">
+                 <td><span class="answer-date">{{answer.date.substring(11,19)}}</span> {{answer.student}}:</td><td>{{answer.answer}}</td>
+                   <td><i ng-if="vm.lastQuestion.isAutocheck && answer.answer != vm.lastQuestion.correctTextAnswer" class="material-icons wrongAnswer">clear</i>
+                   <i ng-if="vm.lastQuestion.isAutocheck && answer.answer == vm.lastQuestion.correctTextAnswer" class="material-icons correctAnswer">done</i></td>
+                </tr>
+                <tr ng-repeat="answer in vm.lastQuestion.studentAnswers track by $index" ng-if="vm.lastQuestion.answerType == 'multipleAnswer'">
+                 <td><span class="answer-date">{{answer.date.substring(11,19)}}</span> {{answer.student}}:</td><td>{{answer.answer}}</td>
+                   <td><i ng-if="vm.lastQuestion.isAutocheck && answer.answer != vm.lastQuestion.possibleMultipleAnswers[vm.lastQuestion.correctMultipleAnswer].value" class="material-icons wrongAnswer">clear</i>
+                   <i ng-if="vm.lastQuestion.isAutocheck && answer.answer == vm.lastQuestion.possibleMultipleAnswers[vm.lastQuestion.correctMultipleAnswer].value" class="material-icons correctAnswer">done</i></td>
+                </tr>
+              </table>
+            </div>
+            <div class="second-column">
+              <div class="chart-container" ng-if="vm.lastQuestion.isAutocheck">
+                <h4>Correct/wrong answers</h4>
+                <canvas
+                  id="pie" 
+                  class="chart chart-pie"
+                  chart-data="vm.dataCheckAnswers" 
+                  chart-labels="vm.labelsCheckAnswers" 
+                  chart-options="vm.optionsCheckAnswers"
+                  chart-colors="vm.colorsCheckAnswers">
+                </canvas>
+              </div>
+              <div class="chart-container">
+                <h4>All answers</h4>
+                <canvas 
+                  id="pie" 
+                  class="chart chart-pie"
+                  chart-data="vm.dataAnswers" 
+                  chart-labels="vm.labelsAnswers" 
+                  chart-options="vm.optionsAnswers">
+                </canvas>
+              </div>  
+            </div>
           </div>
-        </div>
-      </span>
+        </span>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/lepouletsuisse/teacherasked">TeacherAsked</a> is maintained by <a href="https://github.com/lepouletsuisse">lepouletsuisse</a>.</span>
