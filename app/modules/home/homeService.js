@@ -1,75 +1,75 @@
-(function() {
+(function () {
 	'use strict';
 
 	/**
 	 * Service of the home
 	 */
 
-  	angular
+	angular
 		.module('home')
 		.factory('HomeService', HomeService);
-		// Inject your dependencies as .$inject = ['$http', 'someSevide'];
-		// function Name ($http, someSevide) {...}
+	// Inject your dependencies as .$inject = ['$http', 'someSevide'];
+	// function Name ($http, someSevide) {...}
 
-		HomeService.$inject = ['$http'];
+	HomeService.$inject = ['$http'];
 
-		function HomeService ($http) {
+	function HomeService($http) {
 
-			var apiBaseURL = config.ApiBaseURL;
+		var apiBaseURL = config.ApiBaseURL;
 
-			return {
-				//Login
-				login: function(username, password){
-					return $http({
-						url: apiBaseURL + "/auth", 
-						method: "GET", 
-						params: {
-							"username": username, 
-							"password": password
-						},
-					})
-					.then(function(res){
+		return {
+			//Login
+			login: function (username, password) {
+				return $http({
+					url: apiBaseURL + "/auth",
+					method: "GET",
+					params: {
+						"username": username,
+						"password": password
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				},
-				//Register
-				register: function(username, password, firstname, lastname){
-					return $http({
-						url: apiBaseURL + "/register", 
-						method: "POST", 
-						data: {
-							"username": username, 
-							"password": password,
-							"firstname": firstname,
-							"lastname": lastname
-						},
-					})
-					.then(function(res){
+			},
+			//Register
+			register: function (username, password, firstname, lastname) {
+				return $http({
+					url: apiBaseURL + "/register",
+					method: "POST",
+					data: {
+						"username": username,
+						"password": password,
+						"firstname": firstname,
+						"lastname": lastname
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				},
-				checkRoom: function(roomId){
-					return $http({
-						url: apiBaseURL + "/rooms", 
-						method: "GET", 
-						params: {
-							"roomId": roomId
-						},
-					})
-					.then(function(res){
+			},
+			checkRoom: function (roomId) {
+				return $http({
+					url: apiBaseURL + "/rooms",
+					method: "GET",
+					params: {
+						"roomId": roomId
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				}
 			}
 		}
+	}
 
 })();

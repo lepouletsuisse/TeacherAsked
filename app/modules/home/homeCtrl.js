@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	/**
@@ -9,71 +9,71 @@
 	* Controller of the app
 	*/
 
-  	angular
+	angular
 		.module('home')
 		.controller('HomeCtrl', Home);
 
-		Home.$inject = ['$scope', '$state', 'toaster', 'HomeService', '$localStorage'];
+	Home.$inject = ['$scope', '$state', 'toaster', 'HomeService', '$localStorage'];
 
-		/*
-		* recommend
-		* Using function declarations
-		* and bindable members up top.
-		*/
+	/*
+	* recommend
+	* Using function declarations
+	* and bindable members up top.
+	*/
 
-		function Home($scope, $state, toaster, HomeService, $localStorage) {
-			/*jshint validthis: true */
-			var vm = this;
+	function Home($scope, $state, toaster, HomeService, $localStorage) {
+		/*jshint validthis: true */
+		var vm = this;
 
-			$localStorage.token = undefined;
+		$localStorage.token = undefined;
 
-			vm.usernameTeacher = "";
-			vm.firstname = "";
-			vm.lastname = "";
-			vm.password = "";
-			vm.usernameStudent = "";
-			vm.roomId = "";
+		vm.usernameTeacher = "";
+		vm.firstname = "";
+		vm.lastname = "";
+		vm.password = "";
+		vm.usernameStudent = "";
+		vm.roomId = "";
 
-			vm.submitLogin = function(){
-				HomeService.login(vm.usernameTeacher, vm.password)
-				.then(function(res){
-					if(res.status == 200){
+		vm.submitLogin = function () {
+			HomeService.login(vm.usernameTeacher, vm.password)
+				.then(function (res) {
+					if (res.status == 200) {
 						toaster.pop('info', "Login", "Successful login! Welcome " + res.data.username);
 						$localStorage.token = res.data.token;
 						return $state.go('teacherprofile');
-					}else if(res.status == 401){
+					} else if (res.status == 401) {
 						toaster.pop('error', "Login", res.data);
-					}else{
+					} else {
 						toaster.pop('error', "Login", "An error occured while connecting to the server!");
 					}
 				});
-			}
+		}
 
-			vm.submitRegister = function(){
-				HomeService.register(vm.usernameTeacher, vm.password, vm.firstname, vm.lastname)
-				.then(function(res){
-					if(res.status == 201){
+		vm.submitRegister = function () {
+			HomeService.register(vm.usernameTeacher, vm.password, vm.firstname, vm.lastname)
+				.then(function (res) {
+					if (res.status == 201) {
 						toaster.pop('info', "Register", "Successful register! You can log in now!");
-					}else{
+					} else {
 						toaster.pop('error', "Register", res.data);
 					}
 				});
-			}
+		}
 
-			vm.submitStudent = function(){
-				HomeService.checkRoom(vm.roomId)
-				.then(function(resRoom){
-					if(resRoom.status == 200){
-						if(resRoom.data.isOpen == false){
+		vm.submitStudent = function () {
+			HomeService.checkRoom(vm.roomId)
+				.then(function (resRoom) {
+					if (resRoom.status == 200) {
+						if (resRoom.data.isOpen == false) {
 							toaster.pop("warning", "Student", "This room is closed!");
 							return;
 						}
-						return $state.go('roomstudent', {roomId: resRoom.data.roomId, username: vm.usernameStudent});
-					}else{
+						return $state.go('roomstudent', { roomId: resRoom.data.roomId, username: vm.usernameStudent });
+					} else {
 						toaster.pop('error', 'Student', resRoom.data);
 					}
 				});
-				
-			}
+
 		}
+	}
 })();

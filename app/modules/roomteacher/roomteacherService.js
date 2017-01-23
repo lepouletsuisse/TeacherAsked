@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	/**
@@ -9,50 +9,50 @@
 	 * Service of the app
 	 */
 
-  	angular
+	angular
 		.module('roomteacher')
 		.factory('RoomteacherService', Roomteacher);
-		// Inject your dependencies as .$inject = ['$http', 'someSevide'];
-		// function Name ($http, someSevide) {...}
+	// Inject your dependencies as .$inject = ['$http', 'someSevide'];
+	// function Name ($http, someSevide) {...}
 
-		Roomteacher.$inject = ['$http'];
+	Roomteacher.$inject = ['$http'];
 
-		function Roomteacher ($http) {
-			var apiBaseURL = config.ApiBaseURL;
+	function Roomteacher($http) {
+		var apiBaseURL = config.ApiBaseURL;
 
-			return {
-				//Login
-				getTeacher: function(token){
-					return $http({
-						url: "/teachers", 
-						method: "GET", 
-						params: {
-							"token": token
-						},
-					})
-					.then(function(res){
+		return {
+			//Login
+			getTeacher: function (token) {
+				return $http({
+					url: "/teachers",
+					method: "GET",
+					params: {
+						"token": token
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				},
-				getRoom: function(roomId){
-					return $http({
-						url: apiBaseURL + "/rooms", 
-						method: "GET", 
-						params: {
-							"roomId": roomId
-						},
-					})
-					.then(function(res){
+			},
+			getRoom: function (roomId) {
+				return $http({
+					url: apiBaseURL + "/rooms",
+					method: "GET",
+					params: {
+						"roomId": roomId
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				}
 			}
 		}
+	}
 
 })();

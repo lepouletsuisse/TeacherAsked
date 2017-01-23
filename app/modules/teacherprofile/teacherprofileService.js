@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	/**
@@ -9,70 +9,70 @@
 	 * Service of the app
 	 */
 
-  	angular
+	angular
 		.module('teacherprofile')
 		.factory('TeacherProfileService', Teacherprofile);
-		// Inject your dependencies as .$inject = ['$http', 'someSevide'];
-		// function Name ($http, someSevide) {...}
+	// Inject your dependencies as .$inject = ['$http', 'someSevide'];
+	// function Name ($http, someSevide) {...}
 
-		Teacherprofile.$inject = ['$http'];
+	Teacherprofile.$inject = ['$http'];
 
-		function Teacherprofile ($http) {
-			
-			var apiBaseURL = config.ApiBaseURL;
+	function Teacherprofile($http) {
 
-			return {
-				//Login
-				getTeacher: function(token){
-					return $http({
-						url: apiBaseURL + "/teachers", 
-						method: "GET", 
-						params: {
-							"token": token
-						},
-					})
-					.then(function(res){
+		var apiBaseURL = config.ApiBaseURL;
+
+		return {
+			//Login
+			getTeacher: function (token) {
+				return $http({
+					url: apiBaseURL + "/teachers",
+					method: "GET",
+					params: {
+						"token": token
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				},
+			},
 
-				createRoom: function(className, numberParticipants, token){
-					return $http({
-						url: apiBaseURL + "/rooms", 
-						method: "POST", 
-						data: {
-							"className": className,
-							"numberParticipants": numberParticipants,
-							"token": token
-						},
-					})
-					.then(function(res){
+			createRoom: function (className, numberParticipants, token) {
+				return $http({
+					url: apiBaseURL + "/rooms",
+					method: "POST",
+					data: {
+						"className": className,
+						"numberParticipants": numberParticipants,
+						"token": token
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				},
-				
-				getExistingRoom: function(token){
-					return $http({
-						url: apiBaseURL + "/rooms/teacher/open", 
-						method: "GET", 
-						params: {
-							"token": token
-						},
-					})
-					.then(function(res){
+			},
+
+			getExistingRoom: function (token) {
+				return $http({
+					url: apiBaseURL + "/rooms/teacher/open",
+					method: "GET",
+					params: {
+						"token": token
+					},
+				})
+					.then(function (res) {
 						return res;
 					})
-					.catch(function(res){
-						return res;		
+					.catch(function (res) {
+						return res;
 					});
-				}
 			}
 		}
+	}
 
 })();

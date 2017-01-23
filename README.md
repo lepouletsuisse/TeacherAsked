@@ -31,4 +31,6 @@ To start it in local, follow this instructions in order:
 6. Start the server with `node app.js` in the root file.
 7. Connect to the web application in your browser `localhost:3000`
 
+## Known issues
+
 #### Enjoy!!
