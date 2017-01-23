@@ -114,7 +114,6 @@
 						return true;
 					}
 				});
-				console.log(returnVal);
 				return returnVal;
 			}
 		}
@@ -149,7 +148,6 @@
 			var correctAnswerCount = 0;
 			var wrongAnswerCount = 0;
 			if(vm.lastQuestion.answerType == "multipleAnswer" && vm.lastQuestion.isAutocheck){
-				console.log("multiple");
 				var correctAnswer = vm.lastQuestion.possibleMultipleAnswers[vm.lastQuestion.correctMultipleAnswer].value;
 				for(var key in answers){
 					var answer = answers[key];
@@ -194,14 +192,12 @@
 			});
 
 			socket.on('info', function(info){
-				console.log(info);
 				$scope.$apply(function(){
 					toaster.pop('info', 'Information', info);
 				});
 			});
 
 			socket.on('critical_error', function(error){
-				console.log(error);
 				socket.disconnect();
 				$scope.$apply(function(){
 					toaster.pop('error', 'Critical error', error);

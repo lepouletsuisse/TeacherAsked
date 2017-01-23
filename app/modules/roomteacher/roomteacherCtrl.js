@@ -154,7 +154,6 @@
 			var correctAnswerCount = 0;
 			var wrongAnswerCount = 0;
 			if(vm.lastQuestion.answerType == "multipleAnswer" && vm.lastQuestion.isAutocheck){
-				console.log("multiple");
 				var correctAnswer = vm.lastQuestion.possibleMultipleAnswers[vm.lastQuestion.correctMultipleAnswer].value;
 				for(var key in answers){
 					var answer = answers[key];
@@ -192,7 +191,6 @@
 
 			//Use timeout to let the toaster pop, toaster doesn't show if not
 			socket.on('info', function(info){
-				console.log(info);
 				$scope.$apply(function(){
 					toaster.pop('info', 'Information', info);
 				});
@@ -205,7 +203,6 @@
 			});
 
 			socket.on('critical_error', function(error){
-				console.log(error);
 				socket.disconnect();
 				$scope.$apply(function(){
 					toaster.pop('error', 'Critical error', error);
@@ -225,7 +222,6 @@
 				$scope.$apply(function(){
 					vm.room.currentQuestion = question;
 				});
-				console.log(vm.room);
 			});
 			
 			socket.on('student_connected', function(student){

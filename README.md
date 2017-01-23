@@ -29,5 +29,6 @@ To start it in local, follow this instructions in order:
 4. Be sure to have bower installed and updated `npm install --save bower` (Docker 1.8.0)
 5. Install the Bower dependencies `bower install`
 6. Start the server with `node app.js` in the root file.
+7. Connect to the web application in your browser `localhost:3000`
 
 #### Enjoy!!
