@@ -32,5 +32,8 @@ To start it in local, follow this instructions in order:
 7. Connect to the web application in your browser `localhost:3000`
 
 ## Known issues
+- On some version of chrome on Mac, there could be a issue wth the icons from material-design-icons. Sometimes they arent's display.
+- The historic of questions for the teacher is not yet implemented!
+- When a student reload his browser when he is in a room, he is ejected. This is not a expected behavior, i have to fix it.
 
 #### Enjoy!!
