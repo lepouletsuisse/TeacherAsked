@@ -42,8 +42,9 @@ router.get('/', function(req, res){
                     console.log(err);
                     throw err;
                 }else{
-                    teacher.password = undefined;
-                    return res.status(200).json(teacher);
+                    var teacherObject = teacher.toObject();
+                    teacherObject.password = undefined;
+                    return res.status(200).json(teacherObject);
                 }
             });
         }

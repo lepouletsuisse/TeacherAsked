@@ -6,7 +6,7 @@ var TeacherSchema = new Schema({
     firstname: { type: String, required: true, trim: true},
     lastname: { type: String, required: true, trim: true},
     password: { type: String, required: true},
-    token: {type: String, index: {unique: true}, required: false}
+    token: {type: String, required: false}
 });
 
 mongoose.model('Teacher', TeacherSchema);

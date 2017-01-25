@@ -17,6 +17,7 @@ router.post('/', function(req, res){
     var context = {};
     var newTeacher = new Teacher(req.body);
 
+    console.log("NEW TEACHER");
     console.log(newTeacher);
 
     if(newTeacher.username === "" || newTeacher.password === "" || newTeacher.firstname === "" || newTeacher.lastname === ""){
