@@ -26,7 +26,7 @@ To start it in local, follow this instructions in order:
 1. Clone the repo from `git@github.com:lepouletsuisse/TeacherAsked.git`
 2. Be sure to have [NodeJS](https://nodejs.org/en/) (Node 6.9.1 // NPM 4.0.2) on your computer.
 3. Install the dependencies `npm install`
-4. Be sure to have bower installed and updated `npm install --save bower` (Docker 1.8.0)
+4. Be sure to have bower installed and updated `npm install -g bower` (Docker 1.8.0)
 5. Install the Bower dependencies `bower install`
 6. Start the server with `node app.js` in the root file.
 7. Connect to the web application in your browser `localhost:3000`
